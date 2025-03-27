@@ -2,7 +2,6 @@ from Node import Node
 import numpy as np
 import random
 import generation
-import Generator
 
 equRules = [
     '┐(p∧q) = ┐p∨┐q',  # 0-de morgan
@@ -39,6 +38,12 @@ counter_m = 0
 counter_d = 0
 flag_dn = 0
 
+def allreset():
+    global counter_e, counter_d, counter_m,flag_dn
+    counter_e = 0
+    counter_m = 0
+    counter_d = 0
+    flag_dn = 0
 
 def reset_level():
     global counter_e, counter_d, counter_m

@@ -2,9 +2,11 @@ from Node import Node
 import numpy as np
 import random
 import Equation
-from Hash import number
+import Hash
 node_id = 0  # 记录每个node的id方便后续在随机池中检索
 
+# number = Hash.number
+number = ""
 # 两种操作的次数控制在都不超过十次
 counter_e = 1
 counter_t = 1
@@ -22,6 +24,19 @@ e_pro = 10
 truth_table_and = np.array([['T','F'],['F','F']])
 truth_table_or = np.array([['T','T'],['T','F']])
 truth_table_to = np.array([['T','F'],['T','T']])
+
+def allreset():
+    global counter_e, counter_r, counter_t, counter_u, level, e_pro, probability,index,counter_ring,start,new_number
+    counter_e = 1
+    counter_t = 1
+    counter_u = 1
+    counter_r = 1
+    index = 0
+    counter_ring = 0
+    start = 0
+    level = 0
+    e_pro = 10
+    new_number = ''
 
 def reset_counter(rule_num):
     global counter_e, counter_r, counter_t, counter_u, level, e_pro, probability

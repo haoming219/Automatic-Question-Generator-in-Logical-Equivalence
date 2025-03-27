@@ -1,5 +1,6 @@
+import Equation
 from Node import Node
-import Generator, generation
+import generation
 def print_tree(root, indent=0):
     '''if node is not None:
         print(' ' * indent + str(node.element))
@@ -31,7 +32,9 @@ def print_tree(root, indent=0):
 
         print()
 
-def generate_questons(question_num, rule_num):
+def generate_questions(question_num, rule_num):
+    Equation.allreset()
+    generation.allreset()
     questions = []
     i = 0
     while i < question_num :
@@ -40,31 +43,22 @@ def generate_questons(question_num, rule_num):
         generation.generate_two(test,test1)
         generation.update(test)
         generation.update(test1)
-        print(test.attri + '  =  ' + test1.attri)
-        print_tree(test)
-        print_tree(test1)
+        # print(test.attri + '  =  ' + test1.attri)
+        # print_tree(test)
+        # print_tree(test1)
         flag = generation.reset_counter(rule_num)
         if not flag:
             print('not qualified')
         else:
             i += 1
             questions.append(test.attri + '  =  ' + test1.attri)
-        print(' ')
-    print('Here are the ' + str(question_num) + ' questions we generated which need to use at least ' + str(rule_num) + ' rules:')
-    for j in questions:
-        print( j )
+    return questions
+
+    #     print(' ')
+    # print('Here are the ' + str(question_num) + ' questions we generated which need to use at least ' + str(rule_num) + ' rules:')
+    # for j in questions:
+    #     print( j )
 
 
-generate_questons(5,3)
-'''
-test00 = Node('E')
-left00 = Node('F')
-right00 = Node('T')
-mid00 = Node('∨')
-test00.left = left00
-test00.mid = mid00
-test00.right = right00
-generation.update(test00)
-print("new test:"+test00.attri)
-'''
+# generate_questons(5,3)
 
