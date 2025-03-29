@@ -4,7 +4,7 @@ import random
 import Equation
 import Hash
 node_id = 0  # 记录每个node的id方便后续在随机池中检索
-
+used_rules = []
 # number = Hash.number
 number = ""
 # 两种操作的次数控制在都不超过十次

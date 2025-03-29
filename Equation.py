@@ -104,6 +104,7 @@ def transform(node, node1, current):
         # ┐(p∧q) = ┐p∨┐q
         # node_p, node_q = add_and(add_bracket(add_negation(node)))
         print('use rule 0: ┐(p∧q) = ┐p∨┐q')
+        generation.used_rules.append('┐(p∧q) = ┐p∨┐q')
         node_p, node_q = add_and(add_negation(node))
         new0, new1 = add_or(node1)
         node_p1 = add_negation(new0)
@@ -113,6 +114,7 @@ def transform(node, node1, current):
     elif index == 1:
         # '┐(p∨q) = ┐p∧┐q'
         print('use rule 1: ┐(p∨q) = ┐p∧┐q')
+        generation.used_rules.append('┐(p∨q) = ┐p∧┐q')
         temp = add_negation(node)
         nodep, nodeq = add_or(temp)
         new0, new1 = add_and(node1)
@@ -124,6 +126,7 @@ def transform(node, node1, current):
         # p∨((q)∧(r)) = ((p)v(q))∧((p)v(r))
         # 这是左边的等式
         print('use rule 2: p∨(q∧r) = (pvq)∧(pvr)')
+        generation.used_rules.append('p∨(q∧r) = (pvq)∧(pvr)')
         node_p, temp = add_or(node)  # E1
         node_q, node_r = add_and(temp)  # E2 and E3
         # 这是右边的等式 由于方法返回两个值，必须要有temp来承接这些返回值并继续操作
@@ -139,6 +142,7 @@ def transform(node, node1, current):
         # p∧((q)∨(r)) = ((p)∧(q))v((p)∧(r)) 和上面的基本一摸一样，都属于distributive
         # 这是左边的等式
         print('use rule 3: p∧(q∨r) = (p∧q)v(p∧r)')
+        generation.used_rules.append('p∧(q∨r) = (p∧q)v(p∧r)')
         node_p, temp = add_and(node)  # E1
         node_q, node_r = add_or(temp)  # E2 and E3
         # 这是右边的等式 由于方法返回两个值，必须要有temp来承接这些返回值并继续操作
@@ -154,6 +158,7 @@ def transform(node, node1, current):
         #  (p)v((p)∧(q)) = p
         # 左边等式
         print('use rule 4: pv(p∧q) = p')
+        generation.used_rules.append('pv(p∧q) = p')
         node_p, temp = add_or(node)  # E1
         temp1, node_q = add_and(temp)  # E2
         temp.left = node_p
@@ -165,6 +170,7 @@ def transform(node, node1, current):
         #  (p)∧((p)v(q)) = p
         # 左边等式
         print('use rule 5: p∧(pvq) = p')
+        generation.used_rules.append('p∧(pvq) = p')
         node_p, temp = add_and(node)  # E1
         temp1, node_q = add_or(temp)  # E2
         temp.left = node_p
@@ -174,6 +180,7 @@ def transform(node, node1, current):
         generation.generate_two(node_q, None)
     elif index == 6:
         print('use rule 6: p∧p = p')
+        generation.used_rules.append('p∧p = p')
         node_p = Node('E')
         node.left = node_p
         node.mid = Node('∧')
@@ -181,6 +188,7 @@ def transform(node, node1, current):
         generation.generate_two(node_p, node1)
     elif index == 7:
         print('use rule 7: p∨p = p')
+        generation.used_rules.append('p∨p = p')
         node_p = Node('E')
         node.left = node_p
         node.mid = Node('∨')
@@ -188,6 +196,7 @@ def transform(node, node1, current):
         generation.generate_two(node_p, node1)
     elif index == 8:
         print('use rule 8: p∨T = T')
+        generation.used_rules.append('p∨T = T')
         # p∨F = p',   # 14 identity
         nodes = generation.generate_nodes(['∨', 'E', 'T', 'T'])
         node.left = nodes[1]
@@ -198,6 +207,7 @@ def transform(node, node1, current):
         generation.generate_two(nodes[1], None)
     elif index == 9:
         print('use rule 9: p∧F = F')
+        generation.used_rules.append('p∧F = F')
         # 'p^T = p',  # 13 identity
         nodes = generation.generate_nodes(['∧', 'E', 'F'])
         node.left = nodes[1]
@@ -208,6 +218,7 @@ def transform(node, node1, current):
         generation.generate_two(node.left, None)
     elif index == 10:
         print('use rule 10: p∧┐p = F')
+        generation.used_rules.append('p∧┐p = F')
         node_p, temp = add_and(node)
         node_p1 = add_negation(temp)
         temp.right = node_p
@@ -215,6 +226,7 @@ def transform(node, node1, current):
         generation.generate_two(node_p, None)
     elif index == 11:
         print('use rule 11: p∨┐p = T')
+        generation.used_rules.append('p∨┐p = T')
         node_p, temp = add_or(node)
         node_p1 = add_negation(temp)
         temp.right = node_p
@@ -222,6 +234,7 @@ def transform(node, node1, current):
         generation.generate_two(node_p, None)
     elif index == 12:
         print('use rule 12: ┐┐p = p')
+        generation.used_rules.append('┐┐p = p')
         nodes = generation.generate_nodes(['┐', '┐', 'E', 'E'])
         node.mid = nodes[0]
         node.right = nodes[3]
@@ -234,6 +247,7 @@ def transform(node, node1, current):
             transform(node.right.right, node1, -2)
     elif index == 13:
         print('use rule 13: p∧T = p')
+        generation.used_rules.append('p∧T = p')
         # 'p^T = p',  # 13 identity
         nodes = generation.generate_nodes(['∧', 'E', 'T'])
         node.left = nodes[1]
@@ -243,6 +257,7 @@ def transform(node, node1, current):
         generation.generate_two(node.left, node1)
     elif index == 14:
         print('use rule 14: p∨F = p')
+        generation.used_rules.append('p∨F = p')
         # p∨F = p',   # 14 identity
         nodes = generation.generate_nodes(['∨', 'E', 'F'])
         node.left = nodes[1]
@@ -252,6 +267,7 @@ def transform(node, node1, current):
         generation.generate_two(node.left, node1)
     elif index == 15:
         print('use rule 15: p∧q = q∧p')
+        generation.used_rules.append('p∧q = q∧p')
         # 'p^q = q^p',    # 15 commutative
         left, right = add_and(node)
         left1, right1 = add_and(node1)
@@ -259,6 +275,7 @@ def transform(node, node1, current):
         generation.generate_two(right, left1)
     elif index == 16:
         print('use rule 16: p∨q = q∨p')
+        generation.used_rules.append('p∨q = q∨p')
         # 'p∨q = q∨p',    # 16
         left, right = add_or(node)
         left1, right1 = add_or(node1)
@@ -266,6 +283,7 @@ def transform(node, node1, current):
         generation.generate_two(right, left1)
     elif index == 17:
         print('use rule 17: (p∧q)∧r = p∧(q∧r)')
+        generation.used_rules.append('(p∧q)∧r = p∧(q∧r)')
         # '(p^q)^r = p^(q^r)',    # 17 association
         e0, r0 = add_and(node)
         p0, q0 = add_and(e0)
@@ -276,6 +294,7 @@ def transform(node, node1, current):
         generation.generate_two(r0, r1)
     elif index == 18:
         print('use rule 18: (p∨q)∨r = p∨(q∨r)')
+        generation.used_rules.append('(p∨q)∨r = p∨(q∨r)')
         # '(p∨q)∨r = p∨(q∨r)',    # 18
         e0, r0 = add_or(node)
         p0, q0 = add_or(e0)

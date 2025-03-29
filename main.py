@@ -38,6 +38,7 @@ def generate_questions(question_num, rule_num):
     questions = []
     i = 0
     while i < question_num :
+        generation.used_rules = []
         test = Node('E' )
         test1 = Node('E' )
         generation.generate_two(test,test1)
@@ -51,7 +52,12 @@ def generate_questions(question_num, rule_num):
             print('not qualified')
         else:
             i += 1
-            questions.append(test.attri + '  =  ' + test1.attri)
+            # questions.append(test.attri + '  =  ' + test1.attri)
+            question = test.attri + '  =  ' + test1.attri
+            questions.append({
+                "question": question,
+                "used_rules": generation.used_rules.copy()
+            })
     return questions
 
     #     print(' ')
